@@ -66,7 +66,7 @@ class Form extends Component {
         event.preventDefault();
         if (this.state.selectedFile && this.state.email) {
             try {
-                const response = await fetch('https://testtaskforcourse.azurewebsites.net/api/ProcessBlob?email=${encodeURIComponent(this.state.email)}&file=${encodeURIComponent(this.state.selectedFile)}', {
+                const response = await fetch('/api/ProcessBlob?email=' + encodeURIComponent(this.state.email), {
                     method: 'POST'
                 });
 

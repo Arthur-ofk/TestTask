@@ -13,7 +13,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace Function
 {
-    public   class Function1
+    public   static  class Function1
     {
         
         [FunctionName("Function1")]

@@ -16,7 +16,7 @@ namespace Function
         
         [FunctionName("ProcessBlob")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "ProcessBlob/{email}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
         [Blob("testtask/{rand-guid}", FileAccess.Write)] Stream blobStream,
         string email,
         ILogger log)

@@ -1,7 +1,31 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+ void ConfigureServices(IServiceCollection services)
+{
+    services.AddControllers();
+}
+ void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    if (env.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+    }
 
+    app.UseHttpsRedirection();
+    app.UseRouting();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers(); 
+        endpoints.MapAzureFunctionRoute("MyFunction", "/api/myfunction"); // Map Azure Function route
+
+        // Add more mappings as needed
+    });
+}
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -16,6 +40,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
 
 
 app.MapControllerRoute(

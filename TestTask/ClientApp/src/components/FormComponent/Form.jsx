@@ -3,6 +3,8 @@ import * as React from 'react';
 
 import { Component } from 'react';
 import { BlobServiceClient, AnonymousCredential } from '@azure/storage-blob';
+import { error, post } from 'jquery';
+import axios from 'axios';
 
 
 class Form extends Component {
@@ -16,7 +18,8 @@ class Form extends Component {
             emailError: '',
         };
     }
-     
+    
+    
      handleUpload = async () => {
         if (!this.selectedFile) {
             alert('Please select a file to upload.');
@@ -64,11 +67,19 @@ class Form extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault();
+        const formData = new FormData();
+        formData.append('email', this.state.email);
+        formData.append('file', this.state.selectedFile);
         if (this.state.selectedFile && this.state.email) {
             try {
-                const response = await fetch('/api/ProcessBlob?email=' + encodeURIComponent(this.state.email), {
-                    method: 'POST'
-                });
+                //axios.post('https://functionforupload.azurewebsites.net/api/ProcessBlob?code=P0hUynlC5aVLx5RN7tz5PxNJLundCzd0yhH6O_fDEwlOAzFuF3eVHA==&clientId=blobs_extension', this.state)
+                //    .then(res => {
+                //        console.log(res)
+                //    }).catch(error => {
+                //        console.error(error)
+                //    })
+
+                const response = await fetch('https://functionforupload.azurewebsites.net/api/ProcessBlob?code=P0hUynlC5aVLx5RN7tz5PxNJLundCzd0yhH6O_fDEwlOAzFuF3eVHA==&clientId=blobs_extension', { method: 'POST' ,body: formData, } ,);
 
                 if (response.ok) {
                    

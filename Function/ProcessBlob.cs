@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.IO.Compression;
+using Microsoft.WindowsAzure.Storage;
 
 namespace Function
 {
@@ -16,33 +17,64 @@ namespace Function
         
         [FunctionName("ProcessBlob")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ProcessBlob")] HttpRequest req,
         [Blob("testtask/{rand-guid}", FileAccess.Write)] Stream blobStream,
-        string email,
+        
         ILogger log)
         {
             try
             {
-                var file = req.Form.Files["file"];
-                var recipientEmail = req.Form["email"];
+                var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+                var containerName = "testtask"; 
 
-                if (file == null || string.IsNullOrEmpty(recipientEmail))
+                var storageAccount = CloudStorageAccount.Parse(connectionString);
+                var blobClient = storageAccount.CreateCloudBlobClient();
+                var container = blobClient.GetContainerReference(containerName);
+
+                var file = req.Form.Files[0]; // Assuming you're uploading a single file
+
+                if (file != null && file.Length > 0)
                 {
-                    return new BadRequestObjectResult("Bad Request: Missing file or recipient email");
+                    var blobName = file.FileName; // Use the original file name as the blob name
+                    var blockBlob = container.GetBlockBlobReference(blobName);
+
+                    using (var stream = file.OpenReadStream())
+                    {
+                        await blockBlob.UploadFromStreamAsync(stream);
+                    }
+
+                    return new OkObjectResult("File uploaded successfully");
                 }
-
-                // Upload the file to Azure Blob Storage
-                await file.CopyToAsync(blobStream);
-                blobStream.Close();
-
-                // Return a response or redirect to a success page
-                return new OkObjectResult("File uploaded successfully.");
+                else
+                {
+                    return new BadRequestObjectResult("Invalid file");
+                }
             }
             catch (Exception ex)
             {
-                log.LogError($"Error: {ex.Message}");
-                return new StatusCodeResult(500);
+                log.LogError(ex, "Error uploading file");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+            //    var file = req.Form.Files["file"];
+            //    var recipientEmail = req.Form["email"];
+
+            //    if (file == null || string.IsNullOrEmpty(recipientEmail))
+            //    {
+            //        return new BadRequestObjectResult("Bad Request: Missing file or recipient email");
+            //    }
+
+            //    // Upload the file to Azure Blob Storage
+            //    await file.CopyToAsync(blobStream);
+            //    blobStream.Close();
+
+            //    // Return a response or redirect to a success page
+            //    return new OkObjectResult("File uploaded successfully.");
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.LogError($"Error: {ex.Message}");
+            //    return new StatusCodeResult(500);
+            //}
         }
     }
 }

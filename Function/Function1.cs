@@ -18,10 +18,10 @@ namespace Function
 
         [FunctionName("Function1")]
         public static void Run([BlobTrigger("testtask/{name}", Connection = "AzureWebJobsStorage")] Stream myBlob, string name,
-            [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req, ILogger log)
+             ILogger log)
         {
             //log.LogInformation($"C# Blob trigger function processed blob\n Name:{name} \n  ContentType: {myBlob.Length} Bytes");
-            string email = req.Query["email"];
+           
             // Generate a SAS token for the blob with a 1-hour validity
             var blobServiceClient = new BlobServiceClient(Environment.GetEnvironmentVariable("AzureWebJobsStorage"));
             var blobClient = blobServiceClient.GetBlobContainerClient("testtask").GetBlobClient(name);
@@ -43,25 +43,11 @@ namespace Function
                 EnableSsl = true,
             };
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress("arthauz18@gmail.com", "Artur TS"),
-                Subject = "Blob Uploaded Successfully",
-                Body = $"<p>Your file has been successfully uploaded. You can access it using the following link:</p><p><a href=\"{sasToken}\">Download Link</a></p>",
-                IsBodyHtml = true,
-            };
+           
 
-            mailMessage.To.Add(email);
+           
 
-            try
-            {
-                smtpClient.Send(mailMessage);
-                log.LogInformation("Email sent successfully.");
-            }
-            catch (Exception ex)
-            {
-                log.LogError($"Failed to send email: {ex.Message}");
-            }
+            
         }
     }
 }

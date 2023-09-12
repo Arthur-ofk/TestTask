@@ -4,28 +4,8 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
- void ConfigureServices(IServiceCollection services)
-{
-    services.AddControllers();
-}
- void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-{
-    if (env.IsDevelopment())
-    {
-        app.UseDeveloperExceptionPage();
-    }
+ 
 
-    app.UseHttpsRedirection();
-    app.UseRouting();
-
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllers(); 
-        endpoints.MapAzureFunctionRoute("MyFunction", "/api/myfunction"); // Map Azure Function route
-
-        // Add more mappings as needed
-    });
-}
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

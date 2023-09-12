@@ -1,0 +1,11 @@
+
+    {
+        "bindings": [
+            {
+                "type": "blobTrigger",
+                "name": "myBlob",
+                "path": "testtask/{name}",
+                "connection": "AzureWebJobsStorage"
+            }
+        ]
+    }

@@ -15,9 +15,9 @@ namespace Function
 {
     public   static  class Function1
     {
-        
+
         [FunctionName("Function1")]
-        public static async Task  Run([BlobTrigger("testtask/{name}", Connection = "")]Stream myBlob, string name, 
+        public static void Run([BlobTrigger("testtask/{name}", Connection = "AzureWebJobsStorage")] Stream myBlob, string name,
             [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req, ILogger log)
         {
             //log.LogInformation($"C# Blob trigger function processed blob\n Name:{name} \n  ContentType: {myBlob.Length} Bytes");

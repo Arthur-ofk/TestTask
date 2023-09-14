@@ -64,7 +64,22 @@ namespace TestTask.Services
 
         private void ValidateFileEmailDto(FileEmailDto fileEmailDto)
         {
-           
+            if (fileEmailDto == null)
+            {
+                throw new Exception();
+            }
+            else if (fileEmailDto.Email == null)
+            {
+                throw new Exception();
+            }
+            else if (fileEmailDto.File == null)
+            {
+                throw new Exception();
+            }
+            else if (fileEmailDto.File.Name.EndsWith(".docx", StringComparison.OrdinalIgnoreCase))
+            {
+
+            }
         }
     }
 }

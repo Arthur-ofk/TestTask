@@ -21,7 +21,7 @@ namespace TestTask.Controllers
         {
             string res = await _blobStorageService.UploadFileAsync(fileEmailDto);
 
-            return Ok(res);
+            return Ok(res) ; ;
         }
     }
 }

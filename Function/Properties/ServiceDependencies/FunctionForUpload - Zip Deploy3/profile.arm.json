@@ -113,7 +113,8 @@
                 "reserved": false,
                 "serverFarmId": "[variables('appServicePlan_ResourceId')]",
                 "siteConfig": {
-                  "alwaysOn": true
+                    "location": "https://functionforupload.scm.azurewebsites.net/",
+                    "alwaysOn": true
                 }
               },
               "identity": {
@@ -122,7 +123,7 @@
               "resources": [
                 {
                   "name": "appsettings",
-                  "type": "config",
+                  "type": "Microsoft.Advisor/configurations",
                   "apiVersion": "2015-08-01",
                   "dependsOn": [
                     "[variables('function_ResourceId')]"

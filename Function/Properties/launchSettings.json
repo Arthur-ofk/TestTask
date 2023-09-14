@@ -1,9 +1,10 @@
 {
   "profiles": {
     "Function": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7093",
-      "launchBrowser": false
+        "commandName": "Project",
+        "commandLineArgs": "--port 7093",
+        "launchBrowser": true
     }
+
   }
 }

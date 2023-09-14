@@ -81,7 +81,7 @@ namespace Function
             sasBuilder.SetPermissions(BlobSasPermissions.Read);
             var sasToken = sasBuilder.ToSasQueryParameters(storageKeyCredential).ToString();
 
-            //var sasToken = blobClient.GenerateSasUri(sasBuilder);
+            
 
             return sasToken;
         }

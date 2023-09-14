@@ -1,12 +1,13 @@
 using AutoMapper;
 using TestTask.Services;
+using TestTask.ServicesContracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddTransient<UploadService>();
+builder.Services.AddServices();
 builder.Services.AddControllers();
 var app = builder.Build();
 
@@ -27,3 +28,14 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html"); ;
 
 app.Run();
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
+    { 
+        
+        serviceCollection.AddAutoMapper(typeof(Program));
+        serviceCollection.AddTransient<IUploadService, UploadService>();
+
+        return serviceCollection;
+    }
+}

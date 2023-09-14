@@ -33,11 +33,16 @@ const Form = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!selectedFile) {
+            setFileError('Please select a .docx file.');
+            return;
+        }
         if (!emailPattern.test(email)) {
             setEmailError('Please enter a valid email address.');
             setUploadSuccess(false);
             return;
         }
+       
         const data = new FormData();
         data.append('file', selectedFile);
         data.append('email', email);

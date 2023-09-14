@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TestTask.Services;
+using TestTask.ServicesContracts;
 using TestTask.Shared;
 
 namespace TestTask.Controllers
@@ -8,9 +9,9 @@ namespace TestTask.Controllers
     [Route("[controller]")]
     public class BlobController : ControllerBase
     {
-        private readonly UploadService _blobStorageService;
+        private readonly IUploadService _blobStorageService;
 
-        public BlobController(UploadService blobService)
+        public BlobController(IUploadService blobService)
         {
             _blobStorageService = blobService;
         }

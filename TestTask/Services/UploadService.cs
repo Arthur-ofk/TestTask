@@ -7,15 +7,18 @@ using TestTask.Shared;
 
 namespace TestTask.Services
 {
-    public class UploadService 
+    public class UploadService  : IUploadService
     {
         private readonly BlobServiceClient _blobServiceClient;
         private readonly BlobContainerClient _containerClient;
         private readonly IMapper _mapper;
         private readonly string _connectionString;
+        private IConfiguration configuration;
+       
 
+        
 
-        public UploadService(IConfiguration configuration, IMapper mapper)
+        public UploadService(IConfiguration configuration, IMapper mapper )
         {
             _connectionString = configuration.GetConnectionString("AzureBlobStorage");
             _blobServiceClient = new BlobServiceClient(_connectionString);
@@ -26,16 +29,19 @@ namespace TestTask.Services
 
         public async Task<string> UploadFileAsync(FileEmailDto fileEmailDto)
         {
-            var fileEmail = _mapper.Map<FileEmail>(fileEmailDto);
+            
             try
             {
+                ValidateFileEmailDto(fileEmailDto);
+                    
+                var fileEmail = _mapper.Map<FileEmail>(fileEmailDto);
                 var storageAccount = CloudStorageAccount.Parse(_connectionString);
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var containerName = "testtask";
                 var container = blobClient.GetContainerReference(containerName);
                 string fileName = $"{Guid.NewGuid()}-{fileEmail.File.FileName}";
 
-                // BlobClient blobClient = _containerClient.GetBlobClient(fileName);
+                
                 await container.CreateIfNotExistsAsync();
 
                 var filename = $"{Guid.NewGuid().ToString()}.docx";
@@ -54,6 +60,11 @@ namespace TestTask.Services
                 
                 throw ex;
             }
+        }
+
+        private void ValidateFileEmailDto(FileEmailDto fileEmailDto)
+        {
+           
         }
     }
 }
